@@ -24,7 +24,7 @@ class Firehose(object):
     def _request(self, req):
         _SIGNATURES[self._signature](req, **self._aws_sign_data)
         req.headers['CONTENT-LENGTH'] = str(len(req.payload))
-        print("Sending request:", req.verb, req.url, req.headers, req.payload)
+        #print("Sending request:", req.verb, req.url, req.headers, req.payload)
         return aiohttp.request(
             req.verb,
             req.url,
