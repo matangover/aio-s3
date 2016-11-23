@@ -3,6 +3,7 @@ from .errors import AWSException
 import asyncio
 import json
 import aiohttp
+import base64
 
 class Firehose(object):
 
@@ -31,6 +32,7 @@ class Firehose(object):
             data=req.payload)
 
     async def put_record(self, DeliveryStreamName, Record):
+        Record["Data"] = base64.b64encode(Record["Data"].encode("utf-8")).decode("ascii")
         data = json.dumps({"DeliveryStreamName": DeliveryStreamName, "Record": Record}).encode("utf-8")
         async with self._request(
             HTTPSRequest("POST", "/", {}, {"HOST": self._host, 'x-amz-target': 'Firehose_20150804.PutRecord', 'Content-Type': 'application/x-amz-json-1.1'}, data)
